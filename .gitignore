@@ -11,6 +11,10 @@
 # production
 /build
 
+# folder privary
+/src_beta
+/spotify-beta.7z
+
 # misc
 .DS_Store
 .env.local

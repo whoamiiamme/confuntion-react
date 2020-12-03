@@ -1,8 +1,11 @@
 import React from "react";
 
+import Header from "./HeaderComponent";
+
 export default function HomeComponents() {
   return (
     <React.Fragment>
+      <Header />
       <div>
         <section className="main-container">
           <div className="main-box">

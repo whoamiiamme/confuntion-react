@@ -1,17 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function SlideBar() {
   return (
     <>
       <div className="tab--container ">
         <div className="tab--header">
-          <img
-            src="assets/images/Spotify_Logo.png"
-            className="logo"
-            alt="No Name"
-            height="80"
-            width="190"
-          />
+          <Link to="/">
+            <img
+              src="assets/logo.jpg"
+              className="logo"
+              alt="No Name"
+              height="80"
+              width="190"
+            />
+          </Link>
         </div>
         <div className="tab--menus">
           <ul className="tab--menus__list">
