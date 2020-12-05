@@ -1,4 +1,4 @@
-import React, { isValidElement, useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -14,56 +14,151 @@ import Storage from "./shared/storage";
 
 const store = configureStore();
 
-function App() {
-  const [expiryTime, setExpiryTime] = useState("0");
+class AppRouter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expiryTime: "0",
+    };
+  }
 
-  useEffect(() => {
+  async componentDidMount() {
     let varExpiryTime;
     try {
-      varExpiryTime = Storage.get("expiry_time");
+      varExpiryTime = await Storage.get("expiry_time");
+      console.log("varExpiryTime", varExpiryTime);
     } catch (error) {
       varExpiryTime = 0;
     }
-    setExpiryTime(varExpiryTime);
-  }, []);
+    this.setState({
+      expiryTime: varExpiryTime,
+    });
+    console.log(this.state.expiryTime);
+  }
 
-  const _setExpiryTime = (times) => {
-    setExpiryTime(times);
+  _setExpiryTime = (times) => {
+    this.setState({
+      expiryTime: times,
+    });
   };
 
-  const _isValidSession = () => {
+  _isValidSession = () => {
     const currentTime = new Date().getTime();
-    const varExpiryTime = expiryTime;
+    const varExpiryTime = this.state.expiryTime;
     const isSessionValid = currentTime < varExpiryTime;
     return isSessionValid;
   };
 
-  return (
-    <Provider store={store}>
-      <Router>
-        <div className="app">
-          <SlideBar />
-          <div className="main">
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route
-                path="/redirect"
-                render={(props) => (
-                  <Redirect
-                    {...props}
-                    isValidSession={_isValidSession}
-                    setExpiryTime={_setExpiryTime}
-                  />
-                )}
-              />
-              <Route path="/dashboard" component={Dashboard} />
-              <Route component={Notfound} />
-            </Switch>
+  render() {
+    return (
+      <Provider store={store}>
+        <Router>
+          <div className="app">
+            <SlideBar />
+            <div className="main">
+              <Switch>
+                <Route
+                  exact
+                  path="/"
+                  render={(props) => (
+                    <Home isValidSession={this._isValidSession} {...props} />
+                  )}
+                />
+                <Route
+                  path="/redirect"
+                  render={(props) => (
+                    <Redirect
+                      {...props}
+                      isValidSession={this._isValidSession}
+                      setExpiryTime={this._setExpiryTime}
+                    />
+                  )}
+                />
+                <Route
+                  path="/dashboard"
+                  render={(props) => (
+                    <Dashboard
+                      {...props}
+                      isValidSession={this._isValidSession}
+                    />
+                  )}
+                />
+                <Route component={Notfound} />
+              </Switch>
+            </div>
           </div>
-        </div>
-      </Router>
-    </Provider>
-  );
+        </Router>
+      </Provider>
+    );
+  }
 }
 
-export default App;
+// function App() {
+//   const [expiryTime, setExpiryTime] = useState(0);
+
+//   const _getTimeToken = async () => {
+//     let varExpiryTime;
+//     try {
+//       varExpiryTime = await Storage.get("expiry_time");
+//     } catch (error) {
+//       varExpiryTime = 0;
+//     }
+//     setExpiryTime(varExpiryTime);
+//     console.log(expiryTime);
+//   };
+
+//   useEffect(() => {
+//     console.log("useEffect first");
+//     _getTimeToken();
+//   }, []);
+
+//   useEffect(() => {
+//     console.log("useEffect ", expiryTime);
+//     // setExpiryTime(expiryTime);
+//   }, [expiryTime]);
+
+//   const _setExpiryTime = (times) => {
+//     setExpiryTime(times);
+//   };
+
+//   const _isValidSession = () => {
+//     const currentTime = new Date().getTime();
+//     const varExpiryTime = expiryTime;
+//     const isSessionValid = currentTime < varExpiryTime;
+//     return isSessionValid;
+//   };
+
+//   return (
+//     <Provider store={store}>
+//       <Router>
+//         <div className="app">
+//           <SlideBar />
+//           <div className="main">
+//             <Switch>
+//               <Route exact path="/" component={Home} />
+//               <Route
+//                 path="/redirect"
+//                 render={(props) => (
+//                   <Redirect
+//                     {...props}
+//                     isValidSession={_isValidSession}
+//                     setExpiryTime={_setExpiryTime}
+//                   />
+//                 )}
+//               />
+//               <Route
+//                 path="/dashboard"
+//                 render={(props) => (
+//                   <Dashboard {...props} isValidSession={_isValidSession} />
+//                 )}
+//               />
+//               <Route component={Notfound} />
+//             </Switch>
+//           </div>
+//         </div>
+//       </Router>
+//     </Provider>
+//   );
+// }
+
+export default AppRouter;

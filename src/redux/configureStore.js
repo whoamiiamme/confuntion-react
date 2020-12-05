@@ -11,7 +11,7 @@ import artists from './artists'
 export const configureStore = () => {
   const store = createStore(
     combineReducers({ albums, artists, playlist }),
-    applyMiddleware(thunk, logger)
+    applyMiddleware(thunk)
   )
   return store
 }
