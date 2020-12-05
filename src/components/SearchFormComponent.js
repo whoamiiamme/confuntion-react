@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 
-
 function SearchFormComponent(props) {
-  const [searchTerm, setSearchTerm] = useState("");
+	const [searchTerm, setSearchTerm] = useState("");
 	const [errorMsg, setErrorMsg] = useState("");
 
 	const handleInputChange = (event) => {
@@ -20,9 +19,9 @@ function SearchFormComponent(props) {
 			setErrorMsg("Please enter a search term.");
 		}
 	};
-  return (
-    <React.Fragment>
-      <Form onSubmit={handleSearch} className="searchForm-header">
+	return (
+		<React.Fragment>
+			<Form onSubmit={handleSearch} className="searchForm-header">
 				{errorMsg && <p className="errorMsg">{errorMsg}</p>}
 				<Form.Group controlId="formBasicEmail" className="searchGroup">
 					<Form.Control
@@ -35,12 +34,16 @@ function SearchFormComponent(props) {
 						autoComplete="off"
 					/>
 				</Form.Group>
-				<Button variant="info" type="submit">
+				<Button
+					variant="info"
+					type="submit"
+					className="btn btn-search-result btn-header"
+				>
 					Search
 				</Button>
 			</Form>
-    </React.Fragment>
-  )
+		</React.Fragment>
+	);
 }
 
-export default  SearchFormComponent
+export default SearchFormComponent;
